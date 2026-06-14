@@ -1,0 +1,15 @@
+*
+!/**/
+!*.*
+
+*.exe
+*.pdb
+*.pc
+*.obj
+*.exp
+*.dSYM
+
+.build
+.DS_Store
+
+*_unrecognized.h

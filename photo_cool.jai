@@ -49,3 +49,24 @@ main :: () {
 #import "raylib";
 #import "Math";
 #import "Basic";
+
+#run {
+    opts := get_build_options();
+    if opts.user_data_string != "spawned" {
+        w := compiler_create_workspace("photo_cool");
+
+        child := get_build_options(w);
+        child.output_executable_name = "photo_cool";
+        child.user_data_string = "spawned";
+        #if OS == .WINDOWS {
+            child.additional_linker_arguments = .["/FORCE:MULTIPLE"];
+        }
+        set_build_options(child, w);
+
+        add_build_file(#file, w);
+
+        set_build_options_dc(.{do_output = false});
+    }
+}
+
+#import "Compiler";

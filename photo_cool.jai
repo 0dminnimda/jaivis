@@ -1,3 +1,5 @@
+BACKGROUND :: Color.{ 18, 18, 18, 255 };
+
 main :: () {
     InitWindow(800, 450, "photo cool");
     defer CloseWindow();
@@ -8,17 +10,17 @@ main :: () {
     ImageFormat(*image, .PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
     texture := LoadTextureFromImage(image);
 
-    pixels : [..] u8;
-    pixels.data = image.data;
-    pixels.count = image.width * image.height * 4;
+    pixels := [..] u8.{
+        data = image.data,
+        count = image.width * image.height * 4,
+    };
 
     scale := 0.3;
     pixel_index := 0;
 
     while !WindowShouldClose() {
         wheel := GetMouseWheelMove();
-        scale += (wheel/10);
-        if (scale < 0) scale = 0;
+        scale *= exp(wheel*0.1);
 
         lower := pixel_index;
         upper := (pixel_index + pixels.count / 100) % pixels.count;
@@ -34,7 +36,7 @@ main :: () {
         BeginDrawing();
         defer EndDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(BACKGROUND);
 
         wi := GetRenderWidth();
         hi := GetRenderHeight();
